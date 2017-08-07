@@ -1,1 +1,1184 @@
-more cool stuff
+##############################################################
+##	Title 		:	Elephant Specification List 			##
+## 	Author(s) 	: 	Gijs van Erp & Tim 						##
+##	Institute	:	Rijkswaterstaat & 
+##					Eindhoven University of Technology		##
+##	Copyright 	:	Gijs van Erp & Tim 						##
+##############################################################
+
+##############################################################
+## Content 													##
+##############################################################
+
+## Primary derived types
+## Secondary derived types
+## World
+
+
+define type 
+    ## Primary derived types
+    liquid-material-flow( real )
+    solid-material-flow( real )
+    electrical-energy-flow( real )
+    mechanical-energy-flow( real )
+    information-flow( string )
+	ship ( string)
+    spatial( real )
+
+    class( string )
+    length( real )
+    width( real )
+    height( real )
+    depth( real )
+    frequency( real )
+    safety-factor( real )
+    performance-measure( real )
+    water-flow-velocity( real )
+	standard-deviation( real )
+	count( integer )
+	time( real )
+	reliability( real )
+	availability( real )
+    
+    # Secondary derived types 
+    water-flow(liquid-material-flow)
+    norm-frequency(frequency)
+    control-signal(information-flow)
+    status-signal(information-flow)
+    position(spatial)
+    water-level(spatial)
+	cycle-time( time ) 
+
+define verb 
+    retain in 
+	discharge from 
+	discharge to 
+	provide to
+	changed into
+	import from
+	convert into
+	converted into
+	
+world
+    variable
+        # Variables associated with normative-ship ns.
+        class     	c-ns #< CEMT Class of normative-ship ns.
+        length    	l-ns #< Maximum length of normative-ship ns.
+        width     	w-ns #< Maximum width of normative-ship ns.
+        depth     	d-ns #< Maximum depth of normative-ship ns.
+        height    	h-ns #< Maximum height of normative-ship ns. 
+        position  	p-ns #< GPS-position of normative-ship ns.
+		position	p-destiny
+        
+        # Variables associated with water-way wwlek.
+        water-level nhw-lek      #< Normative high water-level of water-way ww-lek.
+        water-level nlw-lek        #< Normative low water-level of water-way ww-lek.
+        water-level min-wl-lek    #< Minimal water-level of water-way ww-lek at which the lock-complex must be operational.
+        water-level max-wl-lek    #< Maximum water-level of water-way ww-lek at which the lock-complex must be operational.
+        water-level awl-lek        #< Actual water-level of water-way ww-lek.
+        norm-frequency nf-nhw-lek  #< Normative frequency of normative high water-level of water-way ww-lek. 
+        norm-frequency nf-nlw-lek  #< Normative frequency of normative low water-level of water-way ww-lek.
+        water-flow q-dc-from-ark        #< Water-flow to be discharged from water-way ww-lek.
+
+        # Variables associated with water-way ww-ark.
+        water-level nhw-ark        #< Normative high water-level of water-way ww-ark.
+        water-level nlw-ark        #< Normative low water-level of water-way ww-ark.
+        water-level min-wl-ark    #< Minimal water-level of water-way ww-ark at which the lock-complex must be operational.
+        water-level max-wl-ark    #< Maximum water-level of water-way ww-ark at which the lock-complex must be operational.
+        water-level awl-ark        #< Actual water-level of water-way ww-ark.
+        norm-frequency nf-nhw-ark  #< Normative frequency of normative high water-level of water-way ww-ark. 
+        norm-frequency nf-nlw-ark  #< Normative frequency of normative low water-level of water-way ww-ark.
+        water-flow q-dc-to-lek        #< Water-flow to be discharged to water-way ww-ark.
+		
+		# Variables associated with lock-complex nl.
+		position p-entry-exit-lek  #< GPS position at the water-way ww-lek side of the lock at which the nominal ship enters or exits the lock area.
+		position p-wait-lek        #< GPS position at the water-way ww-lek side of the lock at which the nominal ship can wait until the lock is ready to process the ship. 
+		position p-queue-lek    #< GPS position at the water-way ww-lek side of the lock at which the nominal ships can form a queue.
+		position p-heaving-lek     #< GPS position at which the normative ship is heaved and the water-level is equal to awl-lek.
+		position p-entry-exit-ark  #< GPS position at the water-way ww-ark side of the lock at which the nominal ship enters or exits the lock area..
+		position p-wait-ark        #< GPS position at the water-way ww-ark side of the lock at which the nominal ship can wait until the lock is ready to process the ship.
+		position p-queue-ark     #< GPS position at the water-way ww-ark side of the lock at which the nominal ships can form a queue.
+		position p-heaving-ark     #< GPS position at which the normative ship is heaved and the water-level is equal to awl-ark.
+		
+		# Time variables associated with the ship passage cycle.
+		time               t-ww-lek-to-ww-ark #< t-ww-lek-to-ww-ark = t-wa-lek + t-qa-lek + t-enter-lek + t-heaving + t-exit-ark 
+		                                      #< Averge time a ship requires to travel from water-way ww-lek to water-way ww-ark.
+        standard-deviation sigma-ww-lek-to-ww-ark #< sigma-ww-lek-to-ww-ark = sigma-wa-lek + sigma-wait-qa-lek + sigma-enter-lek + sigma-heaving +. 
+		                                      #< Standard deviation of the Averge time a ship requires to travel from water-way ww-lek to water-way ww-ark.	
+        time               t-ww-ark-to-ww-lek #< t-ww-ark-to-ww-lek = t-wa-ark + t-wait-qa-ark + t-leveling. 
+		                                      #< Averge time a ship requires to travel from water-way ww-ark to water-way ww-lek.
+        standard-deviation sigma-ww-ark-to-ww-lek #< sigma-ww-lek-to-ww-ark = sigma-wa-lek + sigma-wait-qa-lek + sigma-leveling. 
+		                                      #< Standard deviation of the Averge time a ship requires to travel from water-way ww-lek to water-way ww-ark.												  
+		time               t-wa-lek       #< Average time a ship will have to spend in the waiting position at the water-way ww-lek side of the lock. 
+		standard-deviation sigma-wa-lek     #< Standard deviation of average time a ship will have to spend in the waiting position at the water-way ww-lek side of the lock. 
+        time               t-qa-lek      #< Average time a ship will have to spend in the queueing position at the water-way ww-lek side of the lock. 
+		standard-deviation sigma-qa-lek      #< Standard deviation of average time a ship will have to spend in the waiting position at the water-way ww-ark side of the lock. 
+	    time               t-entry-lek      #< Average time a ship requires to change position from the waiting position to the heaving position in water-way ww-lek. 
+		standard-deviation sigma-entry-lek      #< Standard deviation of average time a ship requires to change position from the waiting position to the heaving position in water-way ww-lek. 
+	    time               t-wa-ark       #< Average time a ship will have to spend in the waiting position at the water-way ww-ark side of the lock. 
+		standard-deviation sigma-wa-ark     #< Standard deviation of average time a ship will have to spend in the waiting position at the water-way ww-ark side of the lock. 
+        time               t-qa-ark      #< Average time a ship will have to spend in the queueing position at the water-way ww-ark side of the lock. 
+		standard-deviation sigma-qa-ark      #< Standard deviation of average time a ship will have to spend in the waiting position at the water-way ww-ark side of the lock. 
+	    time               t-entry-ark      #< Average time a ship requires to change position from the waiting position to the heaving position in water-way ww-ark. 
+		standard-deviation sigma-entry-ark      #< Standard deviation of average time a ship requires to change position from the waiting position to the heaving position in water-way ww-ark. 
+	    
+	
+	component 
+        normative-ship ns with arguments
+		    c-ns # CEMT Class of the normative-ship.
+            l-ns # Maximum length of the normative-ship.
+            w-ns # Maximum width of the normative-ship.
+            d-ns # Maximum depth of the normative-ship.
+            h-ns # Maximum height of the normative-ship. 
+            p-ns # Position of nominal-ship.
+			p-destiny
+			
+			p-entry-exit-lek  # GPS position at the water-way ww-lek side of the lock at which the nominal ship enters or exits the lock area.
+		    p-wait-lek        # GPS position at the water-way ww-lek side of the lock at which the nominal ship can wait until the lock is ready to process the ship. 
+		    p-queue-lek    # GPS position at the water-way ww-lek side of the lock at which the nominal ships can form a queue.
+		    p-heaving-lek     # GPS position at which the normative ship is heaved and the water-level is equal to awl-lek.
+		    p-entry-exit-ark  # GPS position at the water-way ww-ark side of the lock at which the nominal ship enters or exits the lock area.
+		    p-wait-ark        # GPS position at the water-way ww-ark side of the lock at which the nominal ship can wait until the lock is ready to process the ship.
+		    p-queue-ark     # GPS position at the water-way ww-ark side of the lock at which the nominal ships can form a queue.
+		    p-heaving-ark     # GPS position at which the normative ship is heaved and the water-level is equal to awl-ark.
+			
+			# time variables
+			t-ww-lek-to-ww-ark #< t-ww-lek-to-ww-ark = t-wa-lek + t-qa-lek + t-enter-lek + t-heaving + t-exit-ark 
+		                                      #< Averge time a ship requires to travel from water-way ww-lek to water-way ww-ark.
+			sigma-ww-lek-to-ww-ark #< sigma-ww-lek-to-ww-ark = sigma-wa-lek + sigma-wait-qa-lek + sigma-enter-lek + sigma-heaving +. 
+		                                      #< Standard deviation of the Averge time a ship requires to travel from water-way ww-lek to water-way ww-ark.	
+			t-ww-ark-to-ww-lek #< t-ww-ark-to-ww-lek = t-wa-ark + t-wait-qa-ark + t-leveling. 
+		                                      #< Averge time a ship requires to travel from water-way ww-ark to water-way ww-lek.
+			sigma-ww-ark-to-ww-lek #< sigma-ww-lek-to-ww-ark = sigma-wa-lek + sigma-wait-qa-lek + sigma-leveling. 
+		                                      #< Standard deviation of the Averge time a ship requires to travel from water-way ww-lek to water-way ww-ark.												  
+			t-wa-lek       #< Average time a ship will have to spend in the waiting position at the water-way ww-lek side of the lock. 
+			sigma-wa-lek     #< Standard deviation of average time a ship will have to spend in the waiting position at the water-way ww-lek side of the lock. 
+			t-qa-lek      #< Average time a ship will have to spend in the queueing position at the water-way ww-lek side of the lock. 
+			sigma-qa-lek      #< Standard deviation of average time a ship will have to spend in the waiting position at the water-way ww-ark side of the lock. 
+			t-entry-lek      #< Average time a ship requires to change position from the waiting position to the heaving position in water-way ww-lek. 
+			sigma-entry-lek      #< Standard deviation of average time a ship requires to change position from the waiting position to the heaving position in water-way ww-lek. 
+			t-wa-ark       #< Average time a ship will have to spend in the waiting position at the water-way ww-ark side of the lock. 
+			sigma-wa-ark     #< Standard deviation of average time a ship will have to spend in the waiting position at the water-way ww-ark side of the lock. 
+			t-qa-ark      #< Average time a ship will have to spend in the queueing position at the water-way ww-ark side of the lock. 
+			sigma-qa-ark      #< Standard deviation of average time a ship will have to spend in the waiting position at the water-way ww-ark side of the lock. 
+			t-entry-ark      #< Average time a ship requires to change position from the waiting position to the heaving position in water-way ww-ark. 
+			sigma-entry-ark      #< Standard deviation of average time a ship requires to change position from the waiting position to the heaving position in water-way ww-ark. 
+	    
+
+        water-way ww-lek with arguments
+            nhw-lek     # Normative high water-level of water-way ww-lek.
+            nlw-lek     # Normative low water-level of water-way ww-lek.
+            min-wl-lek # Minimal water-level of water-way ww-lek at which the lock-complex must be operational.
+            max-wl-lek # Maximum water-level of water-way ww-lek at which the lock-complex must be operational.
+            awl-lek     # Actual water-level of water-way ww-lek.
+            nf-nhw-lek  # Normative frequency of normative high water-level of water-way ww-lek. 
+            nf-nlw-lek  # Normative frequency of normative low water-level of water-way ww-lek.
+            q-dc-from-ark    # Water-flow to be discharged from water-way ww-lek.
+	
+        water-way ww-ark with arguments 
+            nhw-ark     # Nominal high water-level.
+            nlw-ark     # Nominal low water-level.
+            min-wl-ark # Minimal leveling water-level.
+            max-wl-ark # Maximum leveling water-level.
+            awl-ark     # Actual water-level
+		    nf-nhw-ark  # Normative frequency of normative high water-level of water-way ww-ark. 
+            nf-nlw-ark  # Normative frequency of normative low water-level of water-way ww-ark.
+            q-dc-to-lek    # Water-flow to be discharged to water-way ww-ark.
+			
+        lock-complex lc with arguments
+            # Parameters associated with normative-ship ns.
+            c-ns # CEMT Class of normative-ship ns.
+            l-ns # Maximum length of normative-ship ns.
+            w-ns # Maximum width of normative-ship ns.
+            d-ns # Maximum depth of normative-ship ns.
+            h-ns # Maximum height of normative-ship ns. 
+            p-ns # GPS-position of normative-ship ns.
+			p-destiny
+        
+            # Parameters  associated with water-way ww-lek.
+            nhw-lek        # Normative high water-level of water-way ww-lek.
+            nlw-lek        # Normative low water-level of water-way ww-lek.
+            min-wl-lek    # Minimal water-level of water-way ww-lek at which the lock-complex must be operational.
+            max-wl-lek    # Maximum water-level of water-way ww-lek at which the lock-complex must be operational.
+            awl-lek        # Actual water-level of water-way ww-lek.
+            nf-nhw-lek  # Normative frequency of normative high water-level of water-way ww-lek. 
+            nf-nlw-lek  # Normative frequency of normative low water-level of water-way ww-lek.
+            q-dc-from-ark        # Water-flow to be discharged from water-way ww-lek.
+
+            # Parameters  associated with water-way ww-ark.
+            nhw-ark        # Normative high water-level of water-way ww-ark.
+            nlw-ark        # Normative low water-level of water-way ww-ark.
+            min-wl-ark    # Minimal water-level of water-way ww-ark at which the lock-complex must be operational.
+            max-wl-ark    # Maximum water-level of water-way ww-ark at which the lock-complex must be operational.
+            awl-ark        # Actual water-level of water-way ww-ark.
+            nf-nhw-ark  # Normative frequency of normative high water-level of water-way ww-ark. 
+            nf-nlw-ark  # Normative frequency of normative low water-level of water-way ww-ark.
+            q-dc-to-lek        # Water-flow to be discharged to water-way ww-ark.
+		
+		    # Parameters associated with lock-complex nl.
+		    p-entry-exit-lek  # GPS position at the water-way ww-lek side of the lock at which the nominal ship enters or exits the lock area.
+		    p-wait-lek        # GPS position at the water-way ww-lek side of the lock at which the nominal ship can wait until the lock is ready to process the ship. 
+		    p-queue-lek    # GPS position at the water-way ww-lek side of the lock at which the nominal ships can form a queue.
+		    p-heaving-lek     # GPS position at which the normative ship is heaved and the water-level is equal to awl-lek.
+		    p-entry-exit-ark  # GPS position at the water-way ww-ark side of the lock at which the nominal ship enters or exits the lock area..
+		    p-wait-ark        # GPS position at the water-way ww-ark side of the lock at which the nominal ship can wait until the lock is ready to process the ship.
+		    p-queue-ark     # GPS position at the water-way ww-ark side of the lock at which the nominal ships can form a queue.
+		    p-heaving-ark     # GPS position at which the normative ship is heaved and the water-level is equal to awl-ark.
+		
+		    # Time parameters associated with the ship passage cycle.
+		    t-ww-lek-to-ww-ark # t-ww-lek-to-ww-ark = t-wa-lek + t-qa-lek + t-enter-lek + t-heaving + t-exit-ark 
+		                       # Averge time a ship requires to travel from water-way ww-lek to water-way ww-ark.
+            sigma-ww-lek-to-ww-ark # sigma-ww-lek-to-ww-ark = sigma-wa-lek + sigma-wait-qa-lek + sigma-enter-lek + sigma-heaving +. 
+		                       # Standard deviation of the Averge time a ship requires to travel from water-way ww-lek to water-way ww-ark.	
+            t-ww-ark-to-ww-lek # t-ww-ark-to-ww-lek = t-wa-ark + t-wait-qa-ark + t-leveling. 
+		                       # Averge time a ship requires to travel from water-way ww-ark to water-way ww-lek.
+            sigma-ww-ark-to-ww-lek # sigma-ww-lek-to-ww-ark = sigma-wa-lek + sigma-wait-qa-lek + sigma-leveling. 
+		                       # Standard deviation of the Averge time a ship requires to travel from water-way ww-lek to water-way ww-ark.												  
+		    t-wa-lek       # Average time a ship will have to spend in the waiting position at the water-way ww-lek side of the lock. 
+		    sigma-wa-lek     # Standard deviation of average time a ship will have to spend in the waiting position at the water-way ww-lek side of the lock. 
+            t-qa-lek      # Average time a ship will have to spend in the queueing position at the water-way ww-lek side of the lock. 
+		    sigma-qa-lek      # Standard deviation of average time a ship will have to spend in the waiting position at the water-way ww-ark side of the lock. 
+	        t-entry-lek      # Average time a ship requires to change position from the waiting position to the heaving position in water-way ww-lek. 
+		    sigma-entry-lek      # Standard deviation of average time a ship requires to change position from the waiting position to the heaving position in water-way ww-lek. 
+	        t-wa-ark       # Average time a ship will have to spend in the waiting position at the water-way ww-ark side of the lock. 
+		    sigma-wa-ark     # Standard deviation of average time a ship will have to spend in the waiting position at the water-way ww-ark side of the lock. 
+            t-qa-ark      # Average time a ship will have to spend in the queueing position at the water-way ww-ark side of the lock. 
+		    sigma-qa-ark      # Standard deviation of average time a ship will have to spend in the waiting position at the water-way ww-ark side of the lock. 
+	        t-entry-ark      # Average time a ship requires to change position from the waiting position to the heaving position in water-way ww-ark. 
+		    sigma-entry-ark      # Standard deviation of average time a ship requires to change position from the waiting position to the heaving position in water-way ww-ark. 
+	   		
+		
+		
+    functional-requirement 
+	    # Water management functions. 
+        fr-rw-ark: retain-water with arguments 
+			lc      # The Lock complex that must fulfill this functional requirement.
+            awl-ark # The actual water-level in the water-way in which water must be retained. 
+            ww-ark     # The water-way in which water must be retained.
+            nhw-ark # The normative high water-level in the water-way in which water must be retained.
+            nlw-ark # The normative low water-level in the water-way in which water must be retained. 
+            awl-lek # The actual water-level in the opposite water-way.
+            nhw-lek # The normative high water-level in the opposite water-way.
+            nlw-lek # The normative low water-level in the opposite water-way.
+        
+        # Water discharge functions 		
+        fr-dwf: lc-discharge-water-to with arguments 
+            lc        # The Lock complex that must fulfill this functional requirement.
+            q-dc-from-ark # The water-flow that must be discharged from the water-way.
+            ww-lek      # The water-way from which water must be discharged.
+            awl-lek  # The actual water-level within the water-way from which water must be discharged. 
+        
+		fr-dwt: lc-discharge-water-from with arguments
+            lc        # The Lock complex that must fulfill this functional requirement.
+            q-dc-to-lek # The water-flow that must be discharged to the water-way.
+            ww-ark      # The water-way to which water must be discharged.
+			awl-ark
+			
+		# Provide places to ship 
+		fr-provide-exit-entry-lek: provide-position-0 with arguments
+				lc
+				p-entry-exit-lek
+				ns
+				max-wl-lek
+				min-wl-lek
+				awl-lek
+				
+				max-wl-ark
+				min-wl-ark
+				awl-ark
+				
+			fr-provide-wa-lek: provide-position-0 with arguments
+				lc
+				p-wait-lek
+				ns
+				max-wl-lek
+				min-wl-lek
+				awl-lek
+				
+				max-wl-ark
+				min-wl-ark
+				awl-ark
+				
+			fr-provide-qa-lek: provide-position-0 with arguments
+				lc
+				p-queue-lek
+				ns
+				max-wl-lek
+				min-wl-lek
+				awl-lek
+				
+				max-wl-ark
+				min-wl-ark
+				awl-ark
+				
+			fr-provide-heaving-lek: provide-position-0 with arguments
+				lc 
+				p-heaving-lek
+				ns
+				max-wl-lek
+				min-wl-lek
+				awl-lek
+				
+				max-wl-ark
+				min-wl-ark
+				awl-ark
+				
+			fr-provide-heaving-ark: provide-position-0 with arguments
+				lc 
+				p-heaving-ark
+				ns
+				max-wl-lek
+				min-wl-lek
+				awl-lek
+				
+				max-wl-ark
+				min-wl-ark
+				awl-ark
+				
+			fr-provide-qa-ark: provide-position-0 with arguments
+				lc
+				p-queue-ark
+				ns
+				max-wl-lek
+				min-wl-lek
+				awl-lek
+				
+				max-wl-ark
+				min-wl-ark
+				awl-ark
+				
+			fr-provide-wa-ark: provide-position-0 with arguments
+				lc
+				p-wait-ark
+				ns
+				max-wl-lek
+				min-wl-lek
+				awl-lek
+				
+				max-wl-ark
+				min-wl-ark
+				awl-ark
+			
+			fr-provide-exit-entry-ark: provide-position-0 with arguments
+				lc 
+				p-entry-exit-ark
+				ns
+				max-wl-lek
+				min-wl-lek
+				awl-lek
+				
+				max-wl-ark
+				min-wl-ark
+				awl-ark
+			
+			# Ship passage function on world level
+			fr-ark-to-lek: ship-position-change-world with arguments
+				p-entry-exit-ark
+				p-entry-exit-lek
+				p-ns
+				p-destiny
+				t-ww-ark-to-ww-lek
+				sigma-ww-ark-to-ww-lek
+				max-wl-lek
+				min-wl-lek
+				awl-lek
+				max-wl-ark
+				min-wl-ark
+				awl-ark
+			
+			
+	
+	design-requirement
+	    dr-t-ww-lek-to-ww-ark: time t-ww-lek-to-ww-ark must be smaller than 0.0 min
+        dr-sigma-ww-lek-to-ww-ark: standard-deviation sigma-ww-lek-to-ww-ark must be smaller than 0.0 min
+        dr-t-ww-ark-to-ww-lek: time t-ww-ark-to-ww-lek must be smaller than 0.0 min
+        dr-sigma-ww-ark-to-ww-lek: standard-deviation sigma-ww-ark-to-ww-lek must be smaller than 0.0 min
+        		
+    # comment
+	    # dr-t-ww-lek-to-ww-ark: Derived from BS SYS-0.020.00.0 page 31.
+		# dr-sigma-ww-lek-to-ww-ark: Derived from BS SYS-0.020.01 page 31.
+		# dr-t-ww-ark-to-ww-lek: Derived from BS SYS-0.020.00.0 page 31.
+		# dr-sigma-ww-ark-to-ww-lek: Derived from BS SYS-0.020.01 page 31.
+		
+define component normative-ship 
+    #< The largest ship that must be able to be processd by the lock. 
+    parameter
+        class     	c # CEMT Class of the normative-ship.
+        length    	l # Maximum length of the normative-ship.
+        width     	w # Maximum width of the normative-ship.
+        depth     	d # Maximum depth of the normative-ship.
+        height    	h # Maximum height of the normative-ship. 
+        position  	p-ns # Position of nominal-ship
+		position 	p-destiny
+		
+		position p-entry-exit-lek  # GPS position at the water-way ww-lek side of the lock at which the nominal ship enters or exits the lock area.
+		position p-wait-lek        # GPS position at the water-way ww-lek side of the lock at which the nominal ship can wait until the lock is ready to process the ship. 
+		position p-queue-lek    # GPS position at the water-way ww-lek side of the lock at which the nominal ships can form a queue.
+		position p-heaving-lek     # GPS position at which the normative ship is heaved and the water-level is equal to awl-lek.
+		position p-entry-exit-ark  # GPS position at the water-way ww-ark side of the lock at which the nominal ship enters or exits the lock area..
+		position p-wait-ark        # GPS position at the water-way ww-ark side of the lock at which the nominal ship can wait until the lock is ready to process the ship.
+		position p-queue-ark     # GPS position at the water-way ww-ark side of the lock at which the nominal ships can form a queue.
+		position p-heaving-ark     # GPS position at which the normative ship is heaved and the water-level is equal to awl-ark.
+		
+		time               t-ww-lek-to-ww-ark #< t-ww-lek-to-ww-ark = t-wa-lek + t-qa-lek + t-enter-lek + t-heaving + t-exit-ark 
+		                                      #< Averge time a ship requires to travel from water-way ww-lek to water-way ww-ark.
+        standard-deviation sigma-ww-lek-to-ww-ark #< sigma-ww-lek-to-ww-ark = sigma-wa-lek + sigma-wait-qa-lek + sigma-enter-lek + sigma-heaving +. 
+		                                      #< Standard deviation of the Averge time a ship requires to travel from water-way ww-lek to water-way ww-ark.	
+        time               t-ww-ark-to-ww-lek #< t-ww-ark-to-ww-lek = t-wa-ark + t-wait-qa-ark + t-leveling. 
+		                                      #< Averge time a ship requires to travel from water-way ww-ark to water-way ww-lek.
+        standard-deviation sigma-ww-ark-to-ww-lek #< sigma-ww-lek-to-ww-ark = sigma-wa-lek + sigma-wait-qa-lek + sigma-leveling. 
+		                                      #< Standard deviation of the Averge time a ship requires to travel from water-way ww-lek to water-way ww-ark.												  
+		time               t-wa-lek       #< Average time a ship will have to spend in the waiting position at the water-way ww-lek side of the lock. 
+		standard-deviation sigma-wa-lek     #< Standard deviation of average time a ship will have to spend in the waiting position at the water-way ww-lek side of the lock. 
+        time               t-qa-lek      #< Average time a ship will have to spend in the queueing position at the water-way ww-lek side of the lock. 
+		standard-deviation sigma-qa-lek      #< Standard deviation of average time a ship will have to spend in the waiting position at the water-way ww-ark side of the lock. 
+	    time               t-entry-lek      #< Average time a ship requires to change position from the waiting position to the heaving position in water-way ww-lek. 
+		standard-deviation sigma-entry-lek      #< Standard deviation of average time a ship requires to change position from the waiting position to the heaving position in water-way ww-lek. 
+	    time               t-wa-ark       #< Average time a ship will have to spend in the waiting position at the water-way ww-ark side of the lock. 
+		standard-deviation sigma-wa-ark     #< Standard deviation of average time a ship will have to spend in the waiting position at the water-way ww-ark side of the lock. 
+        time               t-qa-ark      #< Average time a ship will have to spend in the queueing position at the water-way ww-ark side of the lock. 
+		standard-deviation sigma-qa-ark      #< Standard deviation of average time a ship will have to spend in the waiting position at the water-way ww-ark side of the lock. 
+	    time               t-entry-ark      #< Average time a ship requires to change position from the waiting position to the heaving position in water-way ww-ark. 
+		standard-deviation sigma-entry-ark      #< Standard deviation of average time a ship requires to change position from the waiting position to the heaving position in water-way ww-ark. 
+	    
+    functional-requirement
+	    # Transformation funtional requirements for heaving cycle 
+		# from water-way ww-lek to water-way ww-ark.
+		
+		fr-lek-entry-to-wa-lek: ship-position-change-ship with arguments
+		    p-entry-exit-lek 	# Start position of the ship.
+			p-wait-lek    # End position of the ship.
+			p-ns
+			p-destiny 	# Destination of the ship
+			
+		fr-wa-lek-to-qa-lek: ship-position-change-ship with arguments
+		    p-wait-lek 	# Start position of the ship.
+			p-queue-lek    # End position of the ship.
+			p-ns
+			p-destiny 	# Destination of the ship
+			
+		fr-qa-lek-to-heaving-lek: ship-position-change-ship with arguments
+			p-queue-lek
+			p-heaving-lek
+			p-ns
+			p-destiny
+			
+		fr-heaving-ark-to-exit-ark: ship-position-change-ship with arguments
+			p-heaving-ark
+			p-entry-exit-ark
+			p-ns
+			p-destiny
+	
+		# Transformation funtional requirements for heaving cycle 
+		# from water-way ww-ark to water-way ww-lek.
+			
+		fr-ark-entry-to-wa-ark: ship-position-change-ship with arguments
+		    p-entry-exit-ark 	# Start position of the ship.
+			p-wait-ark    # End position of the ship.
+			p-ns
+			p-destiny 	# Destination of the ship
+			
+		fr-wa-ark-to-qa-ark: ship-position-change-ship with arguments
+		    p-wait-ark 	# Start position of the ship.
+			p-queue-ark    # End position of the ship.
+			p-ns
+			p-destiny 	# Destination of the ship
+			
+		fr-qa-ark-to-heaving-ark: ship-position-change-ship with arguments	
+			p-queue-ark
+			p-heaving-ark
+			p-ns
+			p-destiny
+			
+		fr-heaving-ark-to-exit-lek: ship-position-change-ship with arguments
+			p-heaving-lek
+			p-entry-exit-lek
+			p-ns
+			p-destiny
+		
+    design-requirement
+        dr-c: class c must be equal to IV CEMT
+
+		
+define component water-way
+    parameter
+        water-level nhw-ww       # Normative high water-level.
+        water-level nlw-ww       # Normative low water-level.
+        water-level min-wl-ww   # Minimal water-level of water-way ww-lek at which the lock-complex must be operational.
+        water-level max-wl-ww   # Maximum water-level of water-way ww-lek at which the lock-complex must be operational.
+        water-level awl-ww       # Actual water-level.
+        norm-frequency nf-nhw-ww # Normative frequency of normative high water-level.
+        norm-frequency nf-nlw-ww # Normative frequency of normative low water-level.
+        water-flow q-dc-ww       # Water-flow to be discharged.
+	
+	
+define component lock-complex
+    parameter
+        # Parameters associated with normative-ship ns.
+        class     	c-ns # CEMT Class of normative-ship ns.
+        length    	l-ns # Maximum length of normative-ship ns.
+        width     	w-ns # Maximum width of normative-ship ns.
+        depth     	d-ns # Maximum depth of normative-ship ns.
+        height    	h-ns # Maximum height of normative-ship ns. 
+        position  	p-ns # GPS-position of normative-ship ns.
+		position 	p-destiny
+        
+        # Parameters  associated with water-way ww-lek.
+        water-level nhw-lek        # Normative high water-level of water-way ww-lek.
+        water-level nlw-lek        # Normative low water-level of water-way ww-lek.
+        water-level min-wl-lek    # Minimal water-level of water-way ww-lek at which the lock-complex must be operational.
+        water-level max-wl-lek    # Maximum water-level of water-way ww-lek at which the lock-complex must be operational.
+        water-level awl-lek        # Actual water-level of water-way ww-lek.
+        norm-frequency nf-nhw-lek  # Normative frequency of normative high water-level of water-way ww-lek. 
+        norm-frequency nf-nlw-lek  # Normative frequency of normative low water-level of water-way ww-lek.
+        water-flow q-dc-from-ark        # Water-flow to be discharged from water-way ww-lek.
+
+        # Parameters  associated with water-way ww-ark.
+        water-level nhw-ark        # Normative high water-level of water-way ww-ark.
+        water-level nlw-ark        # Normative low water-level of water-way ww-ark.
+        water-level min-wl-ark    # Minimal water-level of water-way ww-ark at which the lock-complex must be operational.
+        water-level max-wl-ark    # Maximum water-level of water-way ww-ark at which the lock-complex must be operational.
+        water-level awl-ark        # Actual water-level of water-way ww-ark.
+        norm-frequency nf-nhw-ark  # Normative frequency of normative high water-level of water-way ww-ark. 
+        norm-frequency nf-nlw-ark  # Normative frequency of normative low water-level of water-way ww-ark.
+        water-flow q-dc-to-lek        # Water-flow to be discharged to water-way ww-ark.
+		
+		# Parameters associated with lock-complex nl.
+		position p-entry-exit-lek  #< GPS position at the water-way ww-lek side of the lock at which the nominal ship enters or exits the lock area.
+		position p-wait-lek        #< GPS position at the water-way ww-lek side of the lock at which the nominal ship can wait until the lock is ready to process the ship. 
+		position p-queue-lek    #< GPS position at the water-way ww-lek side of the lock at which the nominal ships can form a queue.
+		position p-heaving-lek     #< GPS position at which the normative ship is heaved and the water-level is equal to awl-lek.
+		position p-entry-exit-ark  #< GPS position at the water-way ww-ark side of the lock at which the nominal ship enters or exits the lock area..
+		position p-wait-ark        #< GPS position at the water-way ww-ark side of the lock at which the nominal ship can wait until the lock is ready to process the ship.
+		position p-queue-ark     #< GPS position at the water-way ww-ark side of the lock at which the nominal ships can form a queue.
+		position p-heaving-ark 
+		
+		# Time parameters associated with the ship passage cycle.
+		time               t-ww-lek-to-ww-ark # t-ww-lek-to-ww-ark = t-wa-lek + t-qa-lek + t-enter-lek + t-heaving + t-exit-ark 
+		                                      # Averge time a ship requires to travel from water-way ww-lek to water-way ww-ark.
+        standard-deviation sigma-ww-lek-to-ww-ark # sigma-ww-lek-to-ww-ark = sigma-wa-lek + sigma-wait-qa-lek + sigma-enter-lek + sigma-heaving +. 
+		                                      # Standard deviation of the Averge time a ship requires to travel from water-way ww-lek to water-way ww-ark.	
+        time               t-ww-ark-to-ww-lek # t-ww-ark-to-ww-lek = t-wa-ark + t-wait-qa-ark + t-leveling. 
+		                                      # Averge time a ship requires to travel from water-way ww-ark to water-way ww-lek.
+        standard-deviation sigma-ww-ark-to-ww-lek # sigma-ww-lek-to-ww-ark = sigma-wa-lek + sigma-wait-qa-lek + sigma-leveling. 
+		                                      # Standard deviation of the Averge time a ship requires to travel from water-way ww-lek to water-way ww-ark.												  
+		time               t-wa-lek       # Average time a ship will have to spend in the waiting position at the water-way ww-lek side of the lock. 
+		standard-deviation sigma-wa-lek     # Standard deviation of average time a ship will have to spend in the waiting position at the water-way ww-lek side of the lock. 
+        time               t-qa-lek      # Average time a ship will have to spend in the queueing position at the water-way ww-lek side of the lock. 
+		standard-deviation sigma-qa-lek      # Standard deviation of average time a ship will have to spend in the waiting position at the water-way ww-ark side of the lock. 
+	    time               t-entry-lek      # Average time a ship requires to change position from the waiting position to the heaving position in water-way ww-lek. 
+		standard-deviation sigma-entry-lek      # Standard deviation of average time a ship requires to change position from the waiting position to the heaving position in water-way ww-lek. 
+	    time               t-wa-ark       # Average time a ship will have to spend in the waiting position at the water-way ww-ark side of the lock. 
+		standard-deviation sigma-wa-ark     # Standard deviation of average time a ship will have to spend in the waiting position at the water-way ww-ark side of the lock. 
+        time               t-qa-ark      # Average time a ship will have to spend in the queueing position at the water-way ww-ark side of the lock. 
+		standard-deviation sigma-qa-ark      # Standard deviation of average time a ship will have to spend in the waiting position at the water-way ww-ark side of the lock. 
+	    time               t-entry-ark      # Average time a ship requires to change position from the waiting position to the heaving position in water-way ww-ark. 
+		standard-deviation sigma-entry-ark      # Standard deviation of average time a ship requires to change position from the waiting position to the heaving position in water-way ww-ark. 
+	
+	component	
+		navigation-lock nl with arguments
+			# Parameters associated with spacial coordinates
+			p-entry-exit-lek  # GPS position at the water-way ww-lek side of the lock at which the nominal ship enters or exits the lock area.
+		    p-wait-lek        # GPS position at the water-way ww-lek side of the lock at which the nominal ship can wait until the lock is ready to process the ship. 
+		    p-queue-lek    # GPS position at the water-way ww-lek side of the lock at which the nominal ships can form a queue.
+		    p-heaving-lek     # GPS position at which the normative ship is heaved and the water-level is equal to awl-lek.
+		    p-entry-exit-ark  # GPS position at the water-way ww-ark side of the lock at which the nominal ship enters or exits the lock area..
+		    p-wait-ark        # GPS position at the water-way ww-ark side of the lock at which the nominal ship can wait until the lock is ready to process the ship.
+		    p-queue-ark     # GPS position at the water-way ww-ark side of the lock at which the nominal ships can form a queue.
+		    p-heaving-ark     # GPS position at which the normative ship is heaved and the water-level is equal to awl-ark.
+			p-ns			
+			p-destiny
+						
+			# Parameters  associated with water-way ww-lek.
+            nhw-lek        # Normative high water-level of water-way ww-lek.
+            nlw-lek        # Normative low water-level of water-way ww-lek.
+            min-wl-lek    # Minimal water-level of water-way ww-lek at which the lock-complex must be operational.
+            max-wl-lek    # Maximum water-level of water-way ww-lek at which the lock-complex must be operational.
+            awl-lek        # Actual water-level of water-way ww-lek.
+            nf-nhw-lek  # Normative frequency of normative high water-level of water-way ww-lek. 
+            nf-nlw-lek  # Normative frequency of normative low water-level of water-way ww-lek.
+
+            # Parameters  associated with water-way ww-ark.
+            nhw-ark        # Normative high water-level of water-way ww-ark.
+            nlw-ark        # Normative low water-level of water-way ww-ark.
+            min-wl-ark    # Minimal water-level of water-way ww-ark at which the lock-complex must be operational.
+            max-wl-ark    # Maximum water-level of water-way ww-ark at which the lock-complex must be operational.
+            awl-ark        # Actual water-level of water-way ww-ark.
+            nf-nhw-ark  # Normative frequency of normative high water-level of water-way ww-ark. 
+            nf-nlw-ark  # Normative frequency of normative low water-level of water-way ww-ark.
+
+			# time variables
+			t-ww-lek-to-ww-ark #< t-ww-lek-to-ww-ark = t-wa-lek + t-qa-lek + t-enter-lek + t-heaving + t-exit-ark 
+		                                      #< Averge time a ship requires to travel from water-way ww-lek to water-way ww-ark.
+			sigma-ww-lek-to-ww-ark #< sigma-ww-lek-to-ww-ark = sigma-wa-lek + sigma-wait-qa-lek + sigma-enter-lek + sigma-heaving +. 
+		                                      #< Standard deviation of the Averge time a ship requires to travel from water-way ww-lek to water-way ww-ark.	
+			t-ww-ark-to-ww-lek #< t-ww-ark-to-ww-lek = t-wa-ark + t-wait-qa-ark + t-leveling. 
+		                                      #< Averge time a ship requires to travel from water-way ww-ark to water-way ww-lek.
+			sigma-ww-ark-to-ww-lek #< sigma-ww-lek-to-ww-ark = sigma-wa-lek + sigma-wait-qa-lek + sigma-leveling. 
+		                                      #< Standard deviation of the Averge time a ship requires to travel from water-way ww-lek to water-way ww-ark.												  
+			t-wa-lek       #< Average time a ship will have to spend in the waiting position at the water-way ww-lek side of the lock. 
+			sigma-wa-lek     #< Standard deviation of average time a ship will have to spend in the waiting position at the water-way ww-lek side of the lock. 
+			t-qa-lek      #< Average time a ship will have to spend in the queueing position at the water-way ww-lek side of the lock. 
+			sigma-qa-lek      #< Standard deviation of average time a ship will have to spend in the waiting position at the water-way ww-ark side of the lock. 
+			t-entry-lek      #< Average time a ship requires to change position from the waiting position to the heaving position in water-way ww-lek. 
+			sigma-entry-lek      #< Standard deviation of average time a ship requires to change position from the waiting position to the heaving position in water-way ww-lek. 
+			t-wa-ark       #< Average time a ship will have to spend in the waiting position at the water-way ww-ark side of the lock. 
+			sigma-wa-ark     #< Standard deviation of average time a ship will have to spend in the waiting position at the water-way ww-ark side of the lock. 
+			t-qa-ark      #< Average time a ship will have to spend in the queueing position at the water-way ww-ark side of the lock. 
+			sigma-qa-ark      #< Standard deviation of average time a ship will have to spend in the waiting position at the water-way ww-ark side of the lock. 
+			t-entry-ark      #< Average time a ship requires to change position from the waiting position to the heaving position in water-way ww-ark. 
+			sigma-entry-ark      #< Standard deviation of average time a ship requires to change position from the waiting position to the heaving position in water-way ww-ark. 
+	    
+			
+		water-barier wb with arguments
+			nhw-lek        # Normative high water-level of water-way ww-lek.
+            nlw-lek        # Normative low water-level of water-way ww-lek.
+            awl-lek        # Actual water-level of water-way ww-lek.
+            nf-nhw-lek  # Normative frequency of normative high water-level of water-way ww-lek. 
+            nf-nlw-lek  # Normative frequency of normative low water-level of water-way ww-lek.
+
+            # Parameters  associated with water-way ww-ark.
+            nhw-ark        # Normative high water-level of water-way ww-ark.
+            nlw-ark        # Normative low water-level of water-way ww-ark.
+            awl-ark        # Actual water-level of water-way ww-ark.
+            nf-nhw-ark  # Normative frequency of normative high water-level of water-way ww-ark. 
+            nf-nlw-ark  # Normative frequency of normative low water-level of water-way ww-ark.
+			
+		pumping-station ps with arguments
+			nhw-lek        # Normative high water-level of water-way ww-lek.
+            nlw-lek        # Normative low water-level of water-way ww-lek.
+            awl-lek        # Actual water-level of water-way ww-lek.
+			q-dc-from-ark
+			
+			# Parameters  associated with water-way ww-ark.
+            nhw-ark        # Normative high water-level of water-way ww-ark.
+            nlw-ark        # Normative low water-level of water-way ww-ark.
+            awl-ark        # Actual water-level of water-way ww-ark.
+			q-dc-to-lek        # Water-flow to be discharged to water-way ww-ark.
+
+					
+		functional-requirement 
+			# Pumping water
+
+			fr01:	pumping-station ps must provide water-flow q-dc-from-ark to pumping-station ps # EXTERNAL
+					# pumping station ps must import water-flow q-dc-to-lek from external
+			fr02: 	pumping-station ps must provide water-flow q-dc-to-lek to pumping-station ps
+					# pumping-station ps must supply water-flow q-dc-to-lek to external
+			fr03:	water-flow q-dc-from-ark must be converted into water-flow q-dc-to-lek
+			# Heaving
+			fr-heaving-ark-to-lek: ship-position-change-ship with arguments
+				p-heaving-ark
+				p-heaving-lek
+				p-ns
+				p-destiny
+				
+			fr-heaving-lek-to-ark: ship-position-change-ship with arguments
+				p-heaving-lek
+				p-heaving-ark
+				p-ns
+				p-destiny
+			
+			# Provide position
+			fr-provide-exit-entry-lek: provide-position-1 with arguments
+				nl 
+				p-entry-exit-lek
+				
+				max-wl-lek
+				min-wl-lek
+				awl-lek
+				
+				max-wl-ark
+				min-wl-ark
+				awl-ark
+				
+			fr-provide-wa-lek: provide-position-1 with arguments
+				nl 
+				p-wait-lek
+				
+				max-wl-lek
+				min-wl-lek
+				awl-lek
+				
+				max-wl-ark
+				min-wl-ark
+				awl-ark
+				
+			fr-provide-qa-lek: provide-position-1 with arguments
+				nl 
+				p-queue-lek
+				
+				max-wl-lek
+				min-wl-lek
+				awl-lek
+				
+				max-wl-ark
+				min-wl-ark
+				awl-ark
+				
+			fr-provide-heaving-lek: provide-position-1 with arguments
+				nl 
+				p-heaving-lek
+				
+				max-wl-lek
+				min-wl-lek
+				awl-lek
+				
+				max-wl-ark
+				min-wl-ark
+				awl-ark
+				
+			fr-provide-heaving-ark: provide-position-1 with arguments
+				nl 
+				p-heaving-ark
+				
+				max-wl-lek
+				min-wl-lek
+				awl-lek
+				
+				max-wl-ark
+				min-wl-ark
+				awl-ark
+				
+			fr-provide-qa-ark: provide-position-1 with arguments
+				nl 
+				p-queue-ark
+				
+				max-wl-lek
+				min-wl-lek
+				awl-lek
+				
+				max-wl-ark
+				min-wl-ark
+				awl-ark
+				
+			fr-provide-wa-ark: provide-position-1 with arguments
+				nl 
+				p-wait-ark
+				
+				max-wl-lek
+				min-wl-lek
+				awl-lek
+				
+				max-wl-ark
+				min-wl-ark
+				awl-ark
+			
+			fr-provide-exit-entry-ark: provide-position-1 with arguments
+				nl 
+				p-entry-exit-ark
+				
+				max-wl-lek
+				min-wl-lek
+				awl-lek
+				
+				max-wl-ark
+				min-wl-ark
+				awl-ark
+			
+				
+define component navigation-lock
+	parameter
+		# Parameters associated with spacial coordinates
+		position 				p-entry-exit-lek  #< GPS position at the water-way ww-lek side of the lock at which the nominal ship enters or exits the lock area.
+		position 				p-wait-lek        #< GPS position at the water-way ww-lek side of the lock at which the nominal ship can wait until the lock is ready to process the ship. 
+		position 				p-queue-lek    #< GPS position at the water-way ww-lek side of the lock at which the nominal ships can form a queue.
+		position 				p-heaving-lek     #< GPS position at which the normative ship is heaved and the water-level is equal to awl-lek.
+		position 				p-entry-exit-ark  #< GPS position at the water-way ww-ark side of the lock at which the nominal ship enters or exits the lock area..
+		position 				p-wait-ark        #< GPS position at the water-way ww-ark side of the lock at which the nominal ship can wait until the lock is ready to process the ship.
+		position 				p-queue-ark     #< GPS position at the water-way ww-ark side of the lock at which the nominal ships can form a queue.
+		position 				p-heaving-ark 
+		position 				p-ns
+		position 				p-destiny
+		
+		# Parameters associated with water-way wwlek.
+        water-level 			nhw-lek      #< Normative high water-level of water-way ww-lek.
+        water-level 			nlw-lek        #< Normative low water-level of water-way ww-lek.
+        water-level 			min-wl-lek    #< Minimal water-level of water-way ww-lek at which the lock-complex must be operational.
+        water-level 			max-wl-lek    #< Maximum water-level of water-way ww-lek at which the lock-complex must be operational.
+        water-level 			awl-lek        #< Actual water-level of water-way ww-lek.
+        norm-frequency 			nf-nhw-lek  #< Normative frequency of normative high water-level of water-way ww-lek. 
+        norm-frequency 			nf-nlw-lek  #< Normative frequency of normative low water-level of water-way ww-lek.
+		
+		# Parameters associated with water-way ww-ark.
+        water-level 			nhw-ark        #< Normative high water-level of water-way ww-ark.
+        water-level 			nlw-ark        #< Normative low water-level of water-way ww-ark.
+        water-level 			min-wl-ark    #< Minimal water-level of water-way ww-ark at which the lock-complex must be operational.
+        water-level 			max-wl-ark    #< Maximum water-level of water-way ww-ark at which the lock-complex must be operational.
+        water-level 			awl-ark        #< Actual water-level of water-way ww-ark.
+        norm-frequency 			nf-nhw-ark  #< Normative frequency of normative high water-level of water-way ww-ark. 
+        norm-frequency 			nf-nlw-ark  #< Normative frequency of normative low water-level of water-way ww-ark.
+		
+		time               t-ww-lek-to-ww-ark # t-ww-lek-to-ww-ark = t-wa-lek + t-qa-lek + t-enter-lek + t-heaving + t-exit-ark 
+		                                      # Averge time a ship requires to travel from water-way ww-lek to water-way ww-ark.
+        standard-deviation sigma-ww-lek-to-ww-ark # sigma-ww-lek-to-ww-ark = sigma-wa-lek + sigma-wait-qa-lek + sigma-enter-lek + sigma-heaving +. 
+		                                      # Standard deviation of the Averge time a ship requires to travel from water-way ww-lek to water-way ww-ark.	
+        time               t-ww-ark-to-ww-lek # t-ww-ark-to-ww-lek = t-wa-ark + t-wait-qa-ark + t-leveling. 
+		                                      # Averge time a ship requires to travel from water-way ww-ark to water-way ww-lek.
+        standard-deviation sigma-ww-ark-to-ww-lek # sigma-ww-lek-to-ww-ark = sigma-wa-lek + sigma-wait-qa-lek + sigma-leveling. 
+		                                      # Standard deviation of the Averge time a ship requires to travel from water-way ww-lek to water-way ww-ark.												  
+		time               t-wa-lek       # Average time a ship will have to spend in the waiting position at the water-way ww-lek side of the lock. 
+		standard-deviation sigma-wa-lek     # Standard deviation of average time a ship will have to spend in the waiting position at the water-way ww-lek side of the lock. 
+        time               t-qa-lek      # Average time a ship will have to spend in the queueing position at the water-way ww-lek side of the lock. 
+		standard-deviation sigma-qa-lek      # Standard deviation of average time a ship will have to spend in the waiting position at the water-way ww-ark side of the lock. 
+	    time               t-entry-lek      # Average time a ship requires to change position from the waiting position to the heaving position in water-way ww-lek. 
+		standard-deviation sigma-entry-lek      # Standard deviation of average time a ship requires to change position from the waiting position to the heaving position in water-way ww-lek. 
+	    time               t-wa-ark       # Average time a ship will have to spend in the waiting position at the water-way ww-ark side of the lock. 
+		standard-deviation sigma-wa-ark     # Standard deviation of average time a ship will have to spend in the waiting position at the water-way ww-ark side of the lock. 
+        time               t-qa-ark      # Average time a ship will have to spend in the queueing position at the water-way ww-ark side of the lock. 
+		standard-deviation sigma-qa-ark      # Standard deviation of average time a ship will have to spend in the waiting position at the water-way ww-ark side of the lock. 
+	    time               t-entry-ark      # Average time a ship requires to change position from the waiting position to the heaving position in water-way ww-ark. 
+		standard-deviation sigma-entry-ark    
+		
+	variable 
+		water-level awl-lc # actual water level in the lock chamber
+		
+	component
+		waiting-area wa-lek with arguments
+			p-wait-lek
+			
+		waiting-area wa-ark with arguments
+			p-wait-ark
+		
+		queue-area qa-ark with arguments
+			p-queue-ark
+		
+		queue-area qa-lek with arguments
+			p-queue-lek
+		
+		lock-head lh-ark with arguments
+			awl-lc
+			awl-ark
+			
+		lock-head lh-lek with arguments
+			awl-lc
+			awl-lek
+			
+		lock-chamber lc with arguments
+			p-heaving-lek
+			p-heaving-ark
+			awl-lek
+			awl-ark
+			
+
+	functional-requirement
+		fr01: 	waiting-area wa-lek must provide position p-wait-lek to waiting-area wa-lek
+		fr02:	waiting-area wa-ark must provide position p-wait-ark to waiting-area wa-ark
+		fr03:	queue-area qa-lek must provide position p-queue-lek to queue-area qa-lek
+		fr04:	queue-area qa-ark must provide position p-queue-ark to queue-area qa-ark
+		fr05:	lock-chamber lc must provide position p-heaving-lek to lock-chamber lc
+		fr06:	lock-chamber lc must provide position p-heaving-ark to lock-chamber lc
+		# heaving TO EXTERNAL
+		fr-heaving-ark-to-lek: ship-position-change-ship with arguments
+			p-heaving-ark
+			p-heaving-lek
+			p-ns
+			p-destiny
+				
+		fr-heaving-lek-to-ark: ship-position-change-ship with arguments
+			p-heaving-lek
+			p-heaving-ark
+			p-ns
+			p-destiny
+			
+define component waiting-area
+	parameter
+		position p-wait
+		
+define component queue-area
+	parameter
+		position p-queue
+		
+define component lock-head	
+	parameter
+		water-level awl-lc
+		water-level awl-ww
+	
+define component lock-chamber 
+	parameter
+		position p-heaving-lek
+		position p-heaving-ark
+		water-level awl-lek
+		water-level awl-ark
+
+define component water-barier
+	parameter
+		# Parameters associated with water-way wwlek.
+		water-level 			nhw-lek      #< Normative high water-level of water-way ww-lek.
+        water-level 			nlw-lek        #< Normative low water-level of water-way ww-lek.
+        water-level 			awl-lek        #< Actual water-level of water-way ww-lek.
+        norm-frequency 			nf-nhw-lek  #< Normative frequency of normative high water-level of water-way ww-lek. 
+        norm-frequency 			nf-nlw-lek  #< Normative frequency of normative low water-level of water-way ww-lek.
+		
+		# Parameters associated with water-way ww-ark.
+        water-level 			nhw-ark        #< Normative high water-level of water-way ww-ark.
+        water-level 			nlw-ark        #< Normative low water-level of water-way ww-ark.
+        water-level 			awl-ark        #< Actual water-level of water-way ww-ark.
+        norm-frequency 			nf-nhw-ark  #< Normative frequency of normative high water-level of water-way ww-ark. 
+        norm-frequency 			nf-nlw-ark  #< Normative frequency of normative low water-level of water-way ww-ark.
+		
+define component pumping-station
+	parameter
+		# Parameters  associated with water-way ww-lek.
+        water-level nhw-lek        # Normative high water-level of water-way ww-lek.
+        water-level nlw-lek        # Normative low water-level of water-way ww-lek.
+        water-level min-wl-lek    # Minimal water-level of water-way ww-lek at which the lock-complex must be operational.
+        water-flow 	q-in
+		
+        # Parameters  associated with water-way ww-ark.
+        water-level nhw-ark        # Normative high water-level of water-way ww-ark.
+        water-level nlw-ark        # Normative low water-level of water-way ww-ark.
+        water-level min-wl-ark    # Minimal water-level of water-way ww-ark at which the lock-complex must be operational.
+        water-flow 	q-out        # Water-flow to be discharged to water-way ww-ark.
+	
+
+
+       	
+
+# This section contains the functional-requirement definitions instantiated 
+# within the Basis-specificatie.
+# -----------------------------------------------------------------------
+
+
+define functional-requirement retain-water
+    #< This requirement is based on requirements BS SYS-0.0192 page 24
+	#< and SYS-0.0193 page 25.
+	#< By altering the conditions listed below one can tune this functional-
+	#< requirement definition to be either 0.0192 or 0.0193 (or both). 
+    parameter 
+        lock-complex lc        # The Lock complex that must fulfill 
+		                          # this functional requirement.
+        water-level     awl-ark  # The actual water-level in the water-way 
+		                          # in which water must be retained.      
+		water-way 		ww-ark 	
+        water-level     nhw-lek  # The normative high water-level in the water-way in which water must be retained.
+        water-level     nlw-lek  # The normative low water-level in the water-way in which water must be retained. 
+        water-level     awl-lek  # The actual water-level in the opposite water-way.
+        water-level     nhw-ark  # The normative high water-level in the opposite water-way.
+        water-level     nlw-ark  # The normative low water-level in the opposite water-way. 
+
+    variable 
+        safety-factor wl-sf  #< Factor to be added to the normative water-levels to increase the robustness of the Lock complex. 
+        reliability   r      #< Probability that the Lock complex will not fail while retaining water
+		                     #< at a random point in time. 
+        availability  a      #< Probability that lock-complex nv is able to retain water at a random 
+		                     #< time within a year. 
+        water-flow    q-leak #< The maximum allowable leakage flow from water-way ww-lek.
+
+    body 
+        lock-complex lc must retain water-level awl-ark in water-way ww-ark
+		
+
+    condition
+        c-lekwl-ww-lek-0: water-level awl-lek is larger than 5.5 mNAP 					#	Water has to be retained if the water level of the lek exceesds 5.5 mNAP
+		c-lekwl-ww-lek-1: water-level awl-lek is smaller than water-level nhw-lek		#	Water-levels in de lek exceeding nhw-lek do not have to be retained for. In this case disaster will strike.
+        c-lekwl-ww-lek-2: water-level awl-lek is larger than water-level awl-ark		#	!!! BUG ALLERT!!! This has to be smaller or equal to right now it will result in a bug, since awl-ark
+																							#	Retaining water will only happen if the lek is high and the rhine kanal is low
+        c-lekwl-ww-ark-0: water-level awl-ark is smaller than water-level nhw-ark		#	If waterlevel in the ark exceeds ark-mhw, the dikes will flood and therefore retaining wont be relevant any more.
+        c-lekwl-ww-ark-1: water-level awl-ark is larger than water-level nlw-ark 		#	
+
+    design-requirement
+        dr-wl-rbf: safety-factor wl-sf must be equal to 0.30 m
+        dr-nhw-lek: water-level nhw-lek must be increased with safety-factor wl-sf
+        dr-nlw-lek: water-level nlw-lek must be decreased with safety-factor wl-sf
+        dr-nhw-ark: water-level nhw-ark must be increased with safety-factor wl-sf
+        dr-nlw-ark: water-level nlw-ark must be decreased with safety-factor wl-sf
+        dr-r: reliability r must be bigger than 0.0 %
+        dr-lek: availability a must be bigger than to 0.0 %
+        dr-q-leak: water-flow q-leak must be smaller than 0.0 m^3/s 
+        
+    # comment
+        # dr-wl-rbf: Derived from 'Leidraadkunstwerken'.
+        # dr-nhw-lek: Derived from 'Leidraadkunstwerken'.
+        # dr-nlw-lek: Derived from 'Leidraadkunstwerken'.
+        # dr-nhw-ark: Derived from 'Leidraadkunstwerken'.
+        # dr-nlw-ark: Derived from 'Leidraadkunstwerken'.
+        # dr-r: Derived from BS SYS-0.0251 page 48.
+        # dr-lek: Derived from BS SYS-0.0250.0 page 47 and BS SYS-0.0252 page 48.
+        # dr-q-leak: Derived from BS SYS-0.0194 page 26.
+
+
+  
+define functional-requirement lc-discharge-water-from
+    #< Derived from BS SYS-0.0195 page 27.
+	#< BS-SYS-0.0195 is split into two seperate functional requirement definitions:
+	#< 'discharge-water-from' and discharge-water-to, since one could have different
+	#< conditions and design-requirements (e.g. w.r.t. flow rates, and velocities).
+	#< at the two sides of the lock. 
+	
+    parameter
+        lock-complex lc     # The Lock complex that must fulfill this functional requirement.
+        water-flow      q      # The water-flow that must be discharged from the water-way.
+        water-way       ww-ark # The water-way from which water must be discharged.
+        water-level     awl-ww # The actual water-level within the water-way from which water must be discharged. 
+    
+    variable 
+        water-flow          q-max  #< The maximum desired water-flow to be discharged. 
+        water-flow          q-leak #< The maximum allowed leakage water-flow. 
+        water-flow-velocity v-q    #< Flow velocity of the water-flow to be discharged. 
+		reliability         r      #< Probability that the lock-complex nv will not fail
+		                           #< while discharging water from water-way ww-lek.
+		availability        a      #< Probability that lock-complex nv is able to discharge
+		                           #< water-flow q from water-way ww-lek at a random point in time within
+								   #< a given year. 
+       
+    body
+        lock-complex lc must discharge water-flow q from water-way ww-ark
+    
+    condition 
+        c-lekwl-ww: water-level awl-ww is larger than 5.5 mNAP
+            
+    design-requirement
+        dr-q-max: water-flow q-max must be bigger than to 0.0 m^3/s
+        dr-q-leak: water-flow q-leak must be smaller than 0.0 m^3/s
+        dr-q-0: water-flow q must be smaller than to q-max
+        dr-q-1: water-flow q must be bigger than to q-leak
+        dr-v-q: water-flow-velocity v-q must be smaller than 0.0 m/s
+	    dr-r: reliability r must be bigger than 0.0 %
+        dr-lek: availability a must be bigger than 0.0 %	
+        
+    # comment 
+	   # dr-q-max  : Derived from 'Hydraulische randvoorwaarden'.
+		# dr-q-leak : Derived from 'Hydraulische randvoorwaarden'.
+		# dr-q-0.0    : Derived from 'Hydraulische randvoorwaarden'.
+        # dr-q-1    : Derived from 'Hydraulische randvoorwaarden'.
+        # dr-v-q    : Derived from 'Hydraulische randvoorwaarden'.
+		# dr-r      : Derived from BS SYS-0.0255 page 50.0, BS SYS-0.0256 page 50.0, and BS SYS-0.0257 page 51. 
+		# dr-lek      : Derived from BS SYS-0.0255 page 50.0, BS SYS-0.0256 page 50.0, and BS SYS-0.0257 page 51.
+   
+
+define functional-requirement lc-discharge-water-to
+    #< Derived from BS SYS-0.0195 page 27.
+	#< BS-SYS-0.0195 is split into two seperate functional requirement definitions:
+	#< 'discharge-water-from' and discharge-water-to, since one could have different
+	#< conditions and design-requirements (e.g. w.r.t. flow rates, and velocities).
+	#< at the two sides of the lock. 
+	
+    parameter
+        lock-complex lc   # The Lock complex that must fulfill this functional requirement.
+        water-flow      q    # The water-flow that must be discharged from the water-way.
+        water-way       ww-lek # The water-way from which water must be discharged.
+		water-level 	awl-lek
+		
+
+
+    body
+        lock-complex lc must discharge water-flow q to water-way ww-lek
+		
+	variable  
+        water-flow-velocity v-q #< Flow velocity of the water-flow to be discharged.
+		reliability         r   #< Probability that the lock-complex nv will not fail
+		                        #< while discharging water to water-way ww-ark.
+		availability        a   #< Probability that lock-complex nv is able to discharge
+		                        #< water-flow q to water-way b at a random point in time within
+								#< a given year. 
+		
+	design-requirement
+	    dr-v-q: water-flow-velocity v-q must be smaller than 0.0 m/s
+		dr-r: reliability r must be bigger than 0.0 %
+        dr-lek: availability a must be bigger than 0.0 %	
+		
+	# comment 
+	    # dr-v-q  : Derived from 'Hydraulische randvoorwaarden'.
+		# dr-r    : Derived from BS SYS-0.0255 page 50.0, BS SYS-0.0256 page 50.0, and BS SYS-0.0257 page 51. 
+		# dr-lek    : Derived from BS SYS-0.0255 page 50.0, BS SYS-0.0256 page 50.0, and BS SYS-0.0257 page 51.
+
+		
+
+define functional-requirement provide-position-0
+    # < Derived from BS SYS-0.020.08 page 35.
+	# < By defining a entry-exit position at both ends of the lock
+	# < the boundaries of the lock area are defined. 
+	
+    parameter
+	    lock-complex 		lc           # Lock complex that must fulfill this function.
+		position        	p 				# position that must be provided
+		normative-ship  	ns           # Normative ship to which the entry-exit position must be provided.
+		
+		# Parameters for constraints
+		water-level 		max-wl-lek
+		water-level 		min-wl-lek
+		water-level 		awl-lek
+		
+		water-level 		max-wl-ark
+		water-level 		min-wl-ark
+		water-level 		awl-ark
+		
+    
+	body	
+	    lock-complex lc must provide position p to normative-ship ns
+		
+define functional-requirement provide-position-1
+	parameter
+		navigation-lock 	nl           # Lock complex that must fulfill this function.
+		position        	p 				# Position that must be provided
+		
+		# Parameters for constraints
+		water-level 		max-wl-lek
+		water-level 		min-wl-lek
+		water-level 		awl-lek
+		
+		water-level 		max-wl-ark
+		water-level 		min-wl-ark
+		water-level 		awl-ark
+	
+	body navigation-lock nl must provide position p to navigation-lock nl
+	#EXTERNAL
+	
+	condition
+		c0:					water-level awl-ark is smaller than max-wl-ark
+		c1:					water-level awl-ark is larger than min-wl-ark
+		c2: 				water-level awl-lek is smaller than max-wl-lek
+		c3: 				water-level awl-lek is larger than min-wl-lek
+		
+define functional-requirement ship-position-change-world 
+    #< Derived from BS SYS-0.0197 page 29 and BS SYS-0.0198.
+	#< The ship has to make a series of positional changes in order
+    #< to get to the opposite water-way.	
+    
+	parameter
+	    position 			p-start
+		position 			p-end
+		position 			p-ns
+		position 			p-destiny
+		time 				t-avarage
+		standard-deviation	sigma
+		water-level 		max-wl-lek
+		water-level 		min-wl-lek
+		water-level 		awl-lek
+		
+		water-level 		max-wl-ark
+		water-level 		min-wl-ark
+		water-level 		awl-ark
+		
+		
+	body
+	    position p-ns must be changed into position p-end
+		
+	condition
+		c-ship-p-change-0:	position p-ns is equal to position p-start
+		c-ship-p-change-1:	position p-destiny is equal to position p-end		
+		
+define functional-requirement ship-position-change-ship
+    #< Derived from BS SYS-0.0197 page 29 and BS SYS-0.0198.
+	#< The ship has to make a series of positional changes in order
+    #< to get to the opposite water-way.	
+    
+	parameter
+	    position 			p-start
+		position 			p-end
+		position 			p-ns
+		position 			p-destiny
+		
+	body
+	    position p-ns must be changed into position p-end
+		
+	condition
+		c-ship-p-change-0:	position p-ns is equal to position p-start
+		c-ship-p-change-1:	position p-destiny is equal to position p-end
+	
+	
+	
+	
+	
+
+ 
